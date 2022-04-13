@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8"> 
+    <title>Features Extracted</title>
+  
+
+  
+<style>
+
+#back{
+    background-color: rgb(27, 50, 51);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    margin: 4px 2px;
+    display:block;
+    height: 50px;
+    width: 80px;
+}
+
+#table{
+  margin-left: auto; 
+  margin-right: auto;
+  table-layout: auto;
+  width: 100%;
+  position: relative;
+  border: 1px solid #333333;
+  border-style: hidden;
+  
+}
+
+#table tr,td{
+  
+  border-collapse: collapse;
+  border: 1px solid rgb(54, 50, 50);
+  width:10%;
+  /*padding: 15px;*/
+  color:black;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+#table th{
+    background-color:#25282b ;
+    color: white;
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+#table tr:nth-child(even){background-color:#c8caca ;}
+
+#table tr:nth-child(odd){background-color:#acacac ;}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+    <script>
+        
+        var sessionString=sessionStorage.getItem('array');
+        /*sessionString = sessionString.replace(/'/g, '"');*/
+        var new_list= JSON.parse(sessionString);
+       /* str = str.substring(1, str.length - 1);
+        var new_list = str.split(",");*/
+        /*new_list = new_list.match(/\d+/g).map(Number)*/
+        console.log(new_list);
+
+        
+        
+    </script>
+
+
+<button type="submit" id="back" class="btn getResult btn-info btn-lg mb-2" onclick="goBack()">Back</button>
+
+    <table border="true" id="table" style="display:block">
+        <tr>
+            <th>Features</th>
+            <th>Rule</th>
+            <th>Status</th>
+        </tr>
+        
+        <tbody>
+        <tr>
+          <td>Having IP Address</td>
+          <td>Domain has IP address : -1<br>Domain does not have IP address : 1</td>
+          <td><b><span id="ip"></span></b></td>
+        </tr>
+
+        <tr>
+          <td>URL Length</td>
+          <td>URL Length < 54 : 1<br>URL Length >= 54 and URL Length <= 75 : 0<br>URL Length > 75 : -1</td>
+          <td><b><span id="url_length"></span></b></td>
+        </tr>
+
+        <tr>
+          <td>Shortening Service</td>
+          <td>Contains tinyURL : -1<br>Otherwise : 1</td>
+          <td><b><span id="ss"></span></b></td>
+        </tr>
+
+        <tr>
+          <td>Having At Symbol</td>
+          <td>URL has ‘@’ symbol : -1<br>URL does not have ‘@’ symbol : 1</td>
+          <td><b><span id="at"></span></b></td>
+        </tr>
+
+        <tr>
+          <td>Double Slash Redirecting</td>
+          <td>Position of the last occurrence of '//' in the URL > 7 : -1<br>Position of the last occurrence of '//' in the URL <= 7 : 1</td>
+          <td><b><span id="double_slash"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Prefix Suffix</td>
+            <td>Domain has '-' symbol : -1<br>Domain does not have '-' symbol : 1</td>
+            <td><b><span id="prefix_suffix"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Having Sub Domain</td>
+            <td>Dots in domain part = 1 : 1<br>Dots in domain part = 2 : 0<br>Dots in domain part > 2 : -1</td>
+            <td><b><span id="sub_domain"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>SSL Final State</td>
+            <td>Having HTTPS and issuer is trusted and age of certificate >= 1 year : 1<br>Having HTTPS and issuer is not trusted : 0<br>Domain does not have HTTPS : -1</td>
+            <td><b><span id="ssl"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Domain Registration Length</td>
+            <td>Domain expiration <= 1 year : -1<br>Domain expiration > 1 year : 1</td>
+            <td><b><span id="reg_length"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Favicon</td>
+            <td>Favicon loaded from external domain : -1<br>Favicon loaded from the domain shown in the address bar : 1</td>
+            <td><b><span id="favs"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Port</td>
+            <td>Contains port of preferred status : -1<br>Otherwise : 1</td>
+            <td><b><span id="port"></span></b></td>
+        </tr>
+        
+        <tr>
+            <td>HTTPS Token</td>
+            <td>Domain has HTTPS token : -1<br>Domain does not have HTTPS token : 1</td>
+            <td><b><span id="token"></span></b></td>
+        </tr>
+        
+        <tr>
+            <td>Request URL</td>
+            <td>Percentage of request URL < 22% : 1<br>Percentage of request URL >= 22% and < 61% : 0<br>Percentage of request URL >= 61% : -1</td>
+            <td><b><span id="request"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>URL of Anchor</td>
+            <td>Percentage of URL of anchor < 31% : 1<br>Percentage of URL anchor >= 31% and <= 67% : 0<br>Percentage of URL anchor > 67% : -1</td>
+            <td><b><span id="anchor"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Links in Tags</td>
+            <td>Percentage of links in tags < 17% : 1<br>Percentage of links in tags >= 17% and <= 81% : 0<br>Percentage of links in tags > 81% : -1</td>
+            <td><b><span id="tags"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>SFH</td>
+            <td>SFH is 'about:blank' or is empty : -1<br>SFH refers to a different domain : 0<br>Otherwise : 1</td>
+            <td><b><span id="sfh"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Submitting to Email</td>
+            <td>Having 'mail()' or 'mailto:' function to submit user information : -1<br>Does not have 'mail()' or 'mailto:' function : 1</td>
+            <td><b><span id="email"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Abnormal URL</td>
+            <td>URL does not have host name : -1<br>URL has host name : 1</td>
+            <td><b><span id="abnormal"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Redirect</td>
+            <td>Number of times website redirected <= 1 : 1<br>Number of times website redirected >= 2 and < 4 : 0<br>Number of times website redirected >= 4 : -1</td>
+            <td><b><span id="redirect"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>On Mouseover</td>
+            <td>On mouseover changes the status bar : -1<br>On mouseover does not change status bar : 1</td>
+            <td><b><span id="on"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Right Click</td>
+            <td>Right click disabled : -1<br>Right click not disabled : 1</td>
+            <td><b><span id="click"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>PopUpWindow</td>
+            <td>Pop up window contains text field : -1<br>Pop up window does not contain text field : 1</td>
+            <td><b><span id="popup"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Iframe</td>
+            <td>Uses iframe tag : -1<br>No iframe redirection : 1</td>
+            <td><b><span id="iframe"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Age of Domain</td>
+            <td>Domain age >= 6 months : 1<br>Domain age < 6 months : -1</td>
+            <td><b><span id="age"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>DNS Record</td>
+            <td>No DNS record for the domain : -1<br>Have DNS record for the domain : 1</td>
+            <td><b><span id="dns"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Web Traffic</td>
+            <td>Website rank < 100,000 : 1<br>Website rank > 100,000 : 0<br>No website traffic : -1</td>
+            <td><b><span id="web"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Page Rank</td>
+            <td>Page rank < 0.2 : -1<br>Page rank >= 0.2 : 1</td>
+            <td><b><span id="rank"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Google Index</td>
+            <td>Web page indexed by Google : 1<br>Web page not indexed by Google : -1</td>
+            <td><b><span id="index"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Links Poiniting to Page</td>
+            <td>Number of links pointing to the webpage = 0 : -1<br>Number of links pointing to the webpage > 0 and <= 2 : 0<br>Number of links pointing to the webpage > 2 : 1</td>
+            <td><b><span id="links"></span></b></td>
+        </tr>
+
+        <tr>
+            <td>Statistical Report</td>
+            <td>Host belongs to top phishing IPs : -1<br>Host does not belong to top phishing IPs : 1</td>
+            <td><b><span id="report"></span></b></td>
+        </tr>
+
+
+    </tbody>
+
+</table>
+
+
+
+<script>
+      
+      function goBack() {
+  window.history.back();
+      }
+     
+
+        document.getElementById("ip").innerHTML = new_list[0];
+        document.getElementById("url_length").innerHTML = new_list[1];
+        document.getElementById("ss").innerHTML = new_list[2];
+        document.getElementById("at").innerHTML = new_list[3];
+        document.getElementById("double_slash").innerHTML = new_list[4];
+        document.getElementById("prefix_suffix").innerHTML = new_list[5];
+        document.getElementById("sub_domain").innerHTML = new_list[6];
+        document.getElementById("ssl").innerHTML = new_list[7];
+        document.getElementById("reg_length").innerHTML = new_list[8];
+        document.getElementById("favs").innerHTML = new_list[9];
+        document.getElementById("port").innerHTML = new_list[10];
+        document.getElementById("token").innerHTML = new_list[11];
+        document.getElementById("request").innerHTML = new_list[12];
+        document.getElementById("anchor").innerHTML = new_list[13];
+        document.getElementById("tags").innerHTML = new_list[14];
+        document.getElementById("sfh").innerHTML = new_list[15];
+        document.getElementById("email").innerHTML = new_list[16];
+        document.getElementById("abnormal").innerHTML = new_list[17];
+        document.getElementById("redirect").innerHTML = new_list[18];
+        document.getElementById("on").innerHTML = new_list[19];
+        document.getElementById("click").innerHTML = new_list[20];
+        document.getElementById("popup").innerHTML = new_list[21];
+        document.getElementById("iframe").innerHTML = new_list[22];
+        document.getElementById("age").innerHTML = new_list[23];
+        document.getElementById("dns").innerHTML = new_list[24];
+        document.getElementById("web").innerHTML = new_list[25];
+        document.getElementById("rank").innerHTML = new_list[26];
+        document.getElementById("index").innerHTML = new_list[27];
+        document.getElementById("links").innerHTML = new_list[28];
+        document.getElementById("report").innerHTML = new_list[29];
+
+
+
+</script>
+
+</body>
+
+</html>

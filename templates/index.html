@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <title>Phishing URL Detection</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
+  <style>
+@keyframes dot-keyframes {
+  0% {
+    opacity: 0.4;
+    transform: scale(1, 1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2, 1.2);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1, 1);
+  }
+}
+.loading-dots {
+  text-align: center;
+  width: 100%;
+}
+.loading-dots--dot {
+  animation: dot-keyframes 1.5s infinite ease-in-out;
+  background-color: #fff;
+  border-radius: 10px;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  margin: 15px;
+}
+.loading-dots--dot:nth-child(2) {
+  animation-delay: 0.5s;
+}
+.loading-dots--dot:nth-child(3) {
+  animation-delay: 1s;
+}
+
+
+h1{
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 40pt;
+  margin-top: 50px;
+  color:white;
+  position: center;
+}
+
+#dataTable{
+  margin-left: auto; 
+  margin-right: auto;
+  table-layout: auto;
+  width: 50%;
+  position: relative;
+}
+
+#dataTable{
+  border: 1px solid #333333;
+  border-style:hidden;
+}
+
+#dataTable tr,td{
+  
+ /* border-collapse: collapse;*/
+  border: 1px solid #ddd;
+  width:10%;
+  /*padding: 15px;*/
+  color:black;
+  text-align: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+#dataTable tr:nth-child(even){background-color:#d1d1d1 ;}
+
+#dataTable tr:nth-child(odd){background-color:#396e7e ;}
+
+
+#reload{
+  position : absolute;
+  left : 790px;
+  bottom : 20px;  
+}
+
+#redirect{
+  position : absolute;
+  left : 580px;
+  bottom : 20px;
+}
+
+
+
+
+
+  </style>
+</head>
+
+
+<body style="background-image: url('https://i.ytimg.com/vi/-MKapbz0GIo/maxresdefault.jpg');"></body>
+<center style="margin-top: 90px;">
+
+  
+  <h1 class="text-white">PhishScan</h1>
+   <div class="single-url">
+   <div class="input-group input-group-lg" style="width: 850px;margin-top: 50px">
+     <div class="input-group-prepend">
+       <span class="input-group-text" id="inputGroup-sizing-lg">URL:</span>
+     </div>
+
+
+     <input type="text" class="form-control" placeholder="Enter URL you want to scan" id="url"   value="">
+     
+       <button type="submit" id="submit" class="btn getResult btn-info btn-lg mb-2" style="margin-left: 10px">Submit</button>
+       <button type="submit" id="clear" class="btn getResult btn-info btn-lg mb-2" onclick="clearField()" style="margin-left: 10px">Clear</button>
+
+    </div>
+
+  </div>
+
+    
+  
+
+    <div class="result"></div>
+</center>
+
+<a href=features>
+<button type="submit" id="redirect" class="btn getResult btn-info btn-lg mb-2"  style="display:none">Show Features</button>
+</a>
+
+
+
+
+
+<table border="true" id="dataTable" style="display:none">
+<tbody>
+
+<tr>
+  <td><b>DOMAIN NAME</b></td>
+  <td><b><span id="domain"></span></b></td>
+</tr>
+
+<tr>
+  <td><b>CREATION DATE</b></td>
+  <td><b><span id="c_date"></span></b></td>
+</tr>
+
+<tr>
+  <td><b>EXPIRATION DATE</b></td>
+  <td><b><span id="e_date"></span></b></td>
+</tr>
+
+<tr>
+  <td><b>REGISTRAR</b></td>
+  <td><b><span id="reg"></span></b></td>
+</tr>
+
+<tr>
+  <td><b>URL LENGTH</b></td>
+  <td><b><span id="length"></span></b></td>
+</tr>
+
+<tr>
+  <td><b>DOMAIN EXPIRATION</b></td>
+  <td><b><span id="reg_length"></span> Days</b></td>
+</tr>
+
+
+
+</tbody>
+</table>
+
+
+<button type="button" id="reload" class="btn getResult btn-info btn-lg mb-2" onclick="reloadPage()" style="display:none">Reload</button>
+
+
+
+
+
+</body>
+
+
+<script>
+
+function clearField(){
+  document.getElementById('url').value='';
+}
+
+
+
+document.getElementsByClassName("getResult")[0].addEventListener("click",result);
+   function result(){
+
+      var div = document.querySelector(".result");
+      var urlname = document.getElementById('url').value;
+
+     
+      /*var f=[];*/
+      $.ajax({
+ 			data : {
+ 				name : urlname
+ 			},
+ 			type : 'GET',
+ 			url : '/result'
+ 		}).always(div.innerHTML= '<div class="loading-dots mt-4"><div class="loading-dots--dot"></div><div class="loading-dots--dot"></div><div class="loading-dots--dot"></div></div>')
+ 		.done(function(data) {
+
+      
+
+ 			if (data.error) {
+ 				alert(data.error);
+ 			}
+
+ 			else {
+        var newHTML = '<h3 class="text-white mt-4">This is a '+data[1]+'</h3>';
+        div.innerHTML=  newHTML;
+        f=data[0];
+        
+        document.getElementById('dataTable').style.display="block";
+        document.getElementById('redirect').style.display="block";
+        document.getElementById('reload').style.display="block";
+        
+      }
+
+    
+
+ 		});
+
+      var lst;
+      $.ajax({
+ 			data : {
+ 				name : urlname
+ 			},
+ 			type : 'GET',
+ 			url : '/details'
+    }).done(function(data){
+        lst=data;
+        document.getElementById("domain").innerHTML = lst[0];
+        document.getElementById("c_date").innerHTML = lst[1];
+        document.getElementById("e_date").innerHTML = lst[2];
+        document.getElementById("reg").innerHTML = lst[3];
+        document.getElementById("length").innerHTML = lst[4];
+        document.getElementById("reg_length").innerHTML = lst[5];
+    });
+    
+    
+    document.getElementById('redirect').onclick=function(){
+          
+          sessionStorage.setItem('array', JSON.stringify(f)); 
+        }
+
+   }
+
+  
+
+   function reloadPage()
+   {
+     location.reload();
+   }
+
+   
+
+</script>
+
+</html>
